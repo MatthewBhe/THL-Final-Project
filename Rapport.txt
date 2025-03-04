@@ -1,0 +1,3 @@
+Exo 1) 
+
+J'ai utilisé Flex pour lire les expressions ensemblistes. Quand le mot "card" est rencontré, on passe en mode spécial pour compter les éléments d'un ensemble. Pour cela, j'ai créé une fonction externe, countElements, qui fait le comptage sans utiliser de boucles ou de conditions directement dans Flex. Le problème principal a été de bien remettre le mode "card" à zéro après le comptage, afin que ça ne perturbe pas la lecture des autres ensembles. J'ai aussi eu des avertissements sur la fonction input() générée par Flex, que j'ai choisi d'ignorer en ajoutant une option de compilation.
