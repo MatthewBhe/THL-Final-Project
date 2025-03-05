@@ -62,4 +62,3 @@ calc4 : EXT_SRC = -lm
 calc5 : EXT_SRC = -lm
 calc-AST : EXT_SRC = arbre.c
 calc-symtab : EXT_SRC = symtab.c -lm
-

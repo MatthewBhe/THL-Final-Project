@@ -355,8 +355,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 19
-#define YY_END_OF_BUFFER 20
+#define YY_NUM_RULES 13
+#define YY_END_OF_BUFFER 14
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -364,14 +364,12 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[52] =
+static const flex_int16_t yy_accept[37] =
     {   0,
-        0,    0,    0,    0,   20,   14,   12,   13,   11,    6,
-       10,   14,    7,    7,    7,    7,    7,   14,   18,   17,
-       17,   18,   12,   10,    5,    0,    0,    0,    0,    0,
-        9,   17,    0,   16,    0,    0,    0,    0,    0,    8,
-        0,   15,    1,    4,    0,    0,    0,    0,    3,    2,
-        0
+        0,    0,   14,   12,   10,   11,    5,   12,    7,    7,
+        7,    7,    7,   12,   10,    4,    0,    0,    0,    0,
+        0,    9,    0,    0,    0,    0,    0,    8,    6,    3,
+        0,    0,    0,    2,    1,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -413,56 +411,44 @@ static const YY_CHAR yy_meta[26] =
         1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[53] =
+static const flex_int16_t yy_base[37] =
     {   0,
-        0,    0,   24,   26,   78,   79,   75,   79,   79,   79,
-       70,   67,   79,   63,   21,   53,   52,   26,   79,   31,
-       33,   31,   67,   61,   79,   18,   49,   43,   48,   37,
-       79,   42,   43,   79,   51,   41,   45,   40,   52,   79,
-       51,   79,   79,   79,   25,   24,   48,   49,   79,   79,
-       79,   37
+        0,    0,   54,   55,   51,   55,   55,   43,   55,   41,
+       17,   30,   29,   21,   43,   55,   16,   27,   21,   26,
+       24,   55,   29,   20,   24,   19,   29,   55,   55,   55,
+       13,   14,   27,   55,   55,   55
     } ;
 
-static const flex_int16_t yy_def[53] =
+static const flex_int16_t yy_def[37] =
     {   0,
-       51,    1,   52,   52,   51,   51,   51,   51,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-        0,   51
+       36,    1,   36,   36,   36,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,    0
     } ;
 
-static const flex_int16_t yy_nxt[105] =
+static const flex_int16_t yy_nxt[81] =
     {   0,
-        6,    7,    8,    9,   10,   11,   12,    6,   13,   13,
-       14,   13,   13,   15,   13,   16,   13,   13,   13,   13,
-       13,   13,   17,   18,    6,   20,   21,   20,   21,   26,
-       35,   30,   32,   32,   32,   32,   33,   19,   35,   27,
-       39,   50,   30,   32,   32,   49,   41,   22,   33,   22,
-       31,   39,   41,   47,   48,   34,   48,   47,   46,   45,
-       44,   40,   43,   38,   37,   36,   24,   42,   23,   29,
-       28,   26,   40,   42,   25,   24,   23,   51,    5,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-
-       51,   51,   51,   51
+        4,    5,    6,    4,    7,    4,    8,    4,    9,    9,
+       10,    9,    9,   11,    9,   12,    9,    9,    9,    9,
+        9,    9,   13,   14,    4,   17,   21,   27,   23,   21,
+       27,   35,   33,   34,   33,   18,   23,   32,   31,   30,
+       29,   26,   25,   24,   15,   22,   20,   19,   28,   17,
+       16,   28,   15,   36,    3,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,   36,   36,   36,   36,   36
     } ;
 
-static const flex_int16_t yy_chk[105] =
+static const flex_int16_t yy_chk[81] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    3,    3,    4,    4,   15,
-       26,   18,   20,   20,   21,   21,   22,   52,   26,   15,
-       30,   46,   30,   32,   32,   45,   33,    3,   33,    4,
-       18,   47,   48,   47,   48,   22,   41,   39,   38,   37,
-       36,   30,   35,   29,   28,   27,   24,   33,   23,   17,
-       16,   14,   47,   48,   12,   11,    7,    5,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
-
-       51,   51,   51,   51
+        1,    1,    1,    1,    1,   11,   14,   21,   17,   21,
+       33,   32,   33,   31,   27,   11,   17,   26,   25,   24,
+       23,   20,   19,   18,   15,   14,   13,   12,   21,   10,
+        8,   33,    5,    3,   36,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,   36,   36,   36,   36,   36,
+       36,   36,   36,   36,   36,   36,   36,   36,   36,   36
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -479,47 +465,36 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "AnalyLex.flex"
-#line 2 "AnalyLex.flex"
-#include "yyparse.h"
+#line 1 "Analyseur.flex"
+#line 2 "Analyseur.flex"
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include "yyparse.h"
 extern FILE *yyin;
 
-#define COLOR_IDENT   "\033[32m"   /* Vert */
-#define COLOR_ASSIGN  "\033[36m"   /* Cyan */
-#define COLOR_SET     "\033[33m"   /* Jaune */
-#define COLOR_OPER    "\033[34m"   /* Bleu */
-#define COLOR_MINUS   "\033[31m"   /* Rouge */
-#define COLOR_NUM     "\033[37m"   /* Blanc */
-#define COLOR_RESET   "\033[0m"
+static unsigned long long parseSet(const char *s) {
+    unsigned long long set = 0;
+    const char *p = s;
+    if (*p == '{') p++;
+    while (*p && *p != '}') {
+        while (*p && !isdigit(*p)) p++;
+        if (*p == '}' || *p == '\0') break;
+        int num = atoi(p);
+        if (num >= 1 && num <= 63)
+            set |= (1ULL << num);
+        while (*p && isdigit(*p)) p++;
+    }
+    return set;
+}
 
-int card_mode = 0;
-
-void printError(const char *s) {
+static void printError(const char *s) {
     fprintf(stderr, "Lexical error: %s\n", s);
 }
-
-int countElements(const char *set) {
-    int count = 0;
-    const char *p = set + 1;
-    while (*p && *p != '}') {
-        while (*p && isspace(*p)) p++; 
-        if (*p == '}' || *p == '\0')
-            break;
-        count++;
-        while (*p && *p != ',' && *p != '}') p++;
-        if (*p == ',') p++;
-    }
-    return count;
-}
-#line 518 "yylex.c"
-
-#line 520 "yylex.c"
+#line 495 "yylex.c"
+#line 496 "yylex.c"
 
 #define INITIAL 0
-#define CARD 1
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -732,9 +707,9 @@ YY_DECL
 		}
 
 	{
-#line 44 "AnalyLex.flex"
+#line 34 "Analyseur.flex"
 
-#line 738 "yylex.c"
+#line 713 "yylex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -761,13 +736,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 52 )
+				if ( yy_current_state >= 37 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 79 );
+		while ( yy_base[yy_current_state] != 55 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -793,104 +768,72 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 45 "AnalyLex.flex"
-{ card_mode = 1; }
+#line 35 "Analyseur.flex"
+{ return UNION; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 46 "AnalyLex.flex"
-{ printf(COLOR_OPER "TOKEN_UNION " COLOR_RESET); }
+#line 36 "Analyseur.flex"
+{ return INTER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 47 "AnalyLex.flex"
-{ printf(COLOR_OPER "TOKEN_INTER " COLOR_RESET); }
+#line 37 "Analyseur.flex"
+{ return COMP; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 48 "AnalyLex.flex"
-{ printf(COLOR_OPER "TOKEN_COMP " COLOR_RESET); }
+#line 38 "Analyseur.flex"
+{ return ASSIGN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 49 "AnalyLex.flex"
-{ printf(COLOR_ASSIGN "TOKEN_ASSIGN " COLOR_RESET); }
+#line 39 "Analyseur.flex"
+{ return MINUS; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 50 "AnalyLex.flex"
-{ printf(COLOR_MINUS "TOKEN_MINUS " COLOR_RESET); }
+#line 40 "Analyseur.flex"
+{ return CARD; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 51 "AnalyLex.flex"
-{ printf(COLOR_IDENT "TOKEN_IDENT %c " COLOR_RESET, toupper(yytext[0])); }
+#line 41 "Analyseur.flex"
+{ yylval.id = toupper(yytext[0]); return IDENT; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 52 "AnalyLex.flex"
-{ printf(COLOR_SET "TOKEN_SET %s" COLOR_RESET, yytext); }
+#line 42 "Analyseur.flex"
+{ yylval.set = parseSet(yytext); return SET; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 53 "AnalyLex.flex"
-{ printf(COLOR_SET "TOKEN_SET {}" COLOR_RESET); }
+#line 43 "Analyseur.flex"
+{ yylval.set = 0; return SET; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 54 "AnalyLex.flex"
-{ printf(COLOR_NUM "%s " COLOR_RESET, yytext); }
+#line 44 "Analyseur.flex"
+{  }
 	YY_BREAK
 case 11:
+/* rule 11 can match eol */
 YY_RULE_SETUP
-#line 55 "AnalyLex.flex"
-{ printf(","); }
+#line 45 "Analyseur.flex"
+{ return '\n'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 56 "AnalyLex.flex"
-{ }
+#line 46 "Analyseur.flex"
+{ printError("Caractère inattendu"); }
 	YY_BREAK
 case 13:
-/* rule 13 can match eol */
 YY_RULE_SETUP
-#line 57 "AnalyLex.flex"
-{ printf("\n"); }
-	YY_BREAK
-case 14:
-YY_RULE_SETUP
-#line 58 "AnalyLex.flex"
-{}
-	YY_BREAK
-case 15:
-YY_RULE_SETUP
-#line 60 "AnalyLex.flex"
-{ printf(COLOR_SET "%d" COLOR_RESET, countElements(yytext)); BEGIN(INITIAL); }
-	YY_BREAK
-case 16:
-YY_RULE_SETUP
-#line 61 "AnalyLex.flex"
-{ printf("0"); BEGIN(INITIAL); }
-	YY_BREAK
-case 17:
-/* rule 17 can match eol */
-YY_RULE_SETUP
-#line 62 "AnalyLex.flex"
-{}
-	YY_BREAK
-case 18:
-YY_RULE_SETUP
-#line 63 "AnalyLex.flex"
-{}
-	YY_BREAK
-case 19:
-YY_RULE_SETUP
-#line 65 "AnalyLex.flex"
+#line 47 "Analyseur.flex"
 ECHO;
 	YY_BREAK
-#line 892 "yylex.c"
+#line 836 "yylex.c"
 case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(CARD):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -1186,7 +1129,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 52 )
+			if ( yy_current_state >= 37 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1214,11 +1157,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 52 )
+		if ( yy_current_state >= 37 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 51);
+	yy_is_jam = (yy_current_state == 36);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1857,12 +1800,9 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 65 "AnalyLex.flex"
+#line 47 "Analyseur.flex"
 
 
-int main(void) {
-    yylex();
-    return 0;
-}
+
 
 

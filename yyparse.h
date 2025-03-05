@@ -54,16 +54,14 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    F_MIN = 258,                   /* F_MIN  */
-    F_MAX = 259,                   /* F_MAX  */
-    FLOTTANT = 260,                /* FLOTTANT  */
-    ENTIER = 261,                  /* ENTIER  */
-    VAR = 262,                     /* VAR  */
-    TOK_SQRT = 263,                /* TOK_SQRT  */
-    TOK_ENSEMBLE_OP = 264,         /* TOK_ENSEMBLE_OP  */
-    TOK_SOUSTRAIRE_ENSEMBLE = 265, /* TOK_SOUSTRAIRE_ENSEMBLE  */
-    TOK_INTERSECTION = 266,        /* TOK_INTERSECTION  */
-    UMINUS = 267                   /* UMINUS  */
+    IDENT = 258,                   /* IDENT  */
+    ASSIGN = 259,                  /* ASSIGN  */
+    SET = 260,                     /* SET  */
+    UNION = 261,                   /* UNION  */
+    INTER = 262,                   /* INTER  */
+    COMP = 263,                    /* COMP  */
+    MINUS = 264,                   /* MINUS  */
+    CARD = 265                     /* CARD  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -72,13 +70,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 63 "dm.bison"
+#line 36 "Analyseur.bison"
 
-  int entier;
-  float flottant;
-  int index;
+    unsigned long long set;
+    int intval;
+    char id;
 
-#line 82 "yyparse.h"
+#line 80 "yyparse.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
