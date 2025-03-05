@@ -35,7 +35,6 @@ int yyerror(const char *s);
 
 %union {
     unsigned long long set;
-    int intval;
     char id;
 }
 
@@ -48,12 +47,12 @@ int yyerror(const char *s);
 %token MINUS
 %token CARD
 
-%type <set> set_expr term factor
+%type <set> set_expr union_expr intersect_expr diff_expr primary card_expr
 
 %left UNION
-%left INTER
-%left MINUS
+%left INTER MINUS
 %left COMP
+%nonassoc ASSIGN
 
 %%
 
@@ -67,16 +66,8 @@ line:
     ;
 
 stmt:
-      IDENT ASSIGN IDENT {
-           if (!defined[(int)$3]) {
-              printError("Variable non définie");
-           } else {
-              symbol[(int)$1] = symbol[(int)$3];
-              defined[(int)$1] = 1;
-              printf("%c = ", $1);
-              printSet(symbol[(int)$1]);
-              printf("\n");
-           }
+      IDENT ASSIGN card_expr %prec ASSIGN {
+           printError("Impossible d'affecter une valeur numérique à un ensemble.");
       }
     | IDENT ASSIGN set_expr {
            symbol[(int)$1] = $3;
@@ -89,32 +80,39 @@ stmt:
            printSet($1);
            printf("\n");
       }
-    | card_expr
-    ;
-
-card_expr:
-      CARD set_expr {
-           int card = countBits($2);
+    | card_expr {
+           int card = countBits($1);
            printf("%d\n", card);
       }
     ;
 
-set_expr:
-      set_expr UNION term { $$ = $1 | $3; }
-    | set_expr INTER term { $$ = $1 & $3; }
-    | set_expr MINUS term { $$ = $1 & ~($3); }
-    | set_expr COMP term { $$ = $1 & ~($3); }
-    | term { $$ = $1; }
+card_expr:
+      CARD set_expr {
+           $$ = $2;
+      }
     ;
 
-term:
-      factor { $$ = $1; }
-    | '(' set_expr ')' { $$ = $2; }
+set_expr: union_expr ;
+
+union_expr:
+      union_expr UNION intersect_expr { $$ = $1 | $3; }
+    | intersect_expr { $$ = $1; }
     ;
 
-factor:
+intersect_expr:
+      intersect_expr INTER diff_expr { $$ = $1 & $3; }
+    | intersect_expr MINUS diff_expr { $$ = $1 & ~($3); }
+    | diff_expr { $$ = $1; }
+    ;
+
+diff_expr:
+      diff_expr COMP primary { $$ = $1 & ~($3); }
+    | primary { $$ = $1; }
+    ;
+
+primary:
       SET { $$ = $1; }
-    | IDENT { 
+    | IDENT {
            if (!defined[(int)$1]) {
                printError("Variable non définie");
                $$ = 0;
@@ -122,6 +120,7 @@ factor:
                $$ = symbol[(int)$1];
            }
       }
+    | '(' set_expr ')' { $$ = $2; }
     ;
 
 %%

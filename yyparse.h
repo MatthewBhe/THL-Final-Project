@@ -73,10 +73,9 @@ union YYSTYPE
 #line 36 "Analyseur.bison"
 
     unsigned long long set;
-    int intval;
     char id;
 
-#line 80 "yyparse.h"
+#line 79 "yyparse.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

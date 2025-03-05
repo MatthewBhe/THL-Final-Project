@@ -1,0 +1,17 @@
+A := {1,2,3}
+B := {2,3,4}
+C := {3,4,5}
+D := A union B inter C
+E := (A union B) inter C
+F := A inter B union C
+G := {5,6,7} comp {6,7}
+H := {8,9} - {9}
+I := A - B
+J := A union (B inter C)
+K := (A union B) comp C
+L := (A union (B inter C))
+M := card {1,1,2,2,3}
+N := card {}
+P := card A
+Q := A
+

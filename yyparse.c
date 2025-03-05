@@ -150,8 +150,10 @@ enum yysymbol_kind_t
   YYSYMBOL_stmt = 17,                      /* stmt  */
   YYSYMBOL_card_expr = 18,                 /* card_expr  */
   YYSYMBOL_set_expr = 19,                  /* set_expr  */
-  YYSYMBOL_term = 20,                      /* term  */
-  YYSYMBOL_factor = 21                     /* factor  */
+  YYSYMBOL_union_expr = 20,                /* union_expr  */
+  YYSYMBOL_intersect_expr = 21,            /* intersect_expr  */
+  YYSYMBOL_diff_expr = 22,                 /* diff_expr  */
+  YYSYMBOL_primary = 23                    /* primary  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -479,16 +481,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   33
+#define YYLAST   30
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  14
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  8
+#define YYNNTS  10
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  19
+#define YYNRULES  21
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  30
+#define YYNSTATES  32
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   265
@@ -538,8 +540,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    60,    60,    61,    65,    66,    70,    81,    88,    92,
-      96,   103,   104,   105,   106,   107,   111,   112,   116,   117
+       0,    59,    59,    60,    64,    65,    69,    72,    79,    83,
+      90,    95,    98,    99,   103,   104,   105,   109,   110,   114,
+     115,   123
 };
 #endif
 
@@ -557,8 +560,8 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "IDENT", "ASSIGN",
   "SET", "UNION", "INTER", "COMP", "MINUS", "CARD", "'\\n'", "'('", "')'",
-  "$accept", "input", "line", "stmt", "card_expr", "set_expr", "term",
-  "factor", YY_NULLPTR
+  "$accept", "input", "line", "stmt", "card_expr", "set_expr",
+  "union_expr", "intersect_expr", "diff_expr", "primary", YY_NULLPTR
 };
 
 static const char *
@@ -568,12 +571,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-10)
+#define YYPACT_NINF (-11)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-7)
+#define YYTABLE_NINF (-1)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -582,9 +585,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -10,     0,   -10,    -3,   -10,     1,   -10,     1,   -10,    -9,
-     -10,    20,   -10,   -10,     4,   -10,    20,    12,   -10,     1,
-       1,     1,     1,     3,    20,   -10,   -10,   -10,   -10,   -10
+     -11,     0,   -11,    14,   -11,     3,   -11,     3,   -11,   -10,
+     -11,   -11,    16,    10,    15,   -11,     4,   -11,   -11,    11,
+     -11,     3,     3,     3,     3,   -11,   -11,   -11,    10,    15,
+      15,   -11
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -592,21 +596,22 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,    19,    18,     0,     4,     0,     3,     0,
-       9,     8,    15,    16,     0,    19,    10,     0,     5,     0,
-       0,     0,     0,    19,     7,    17,    11,    12,    14,    13
+       2,     0,     1,    20,    19,     0,     4,     0,     3,     0,
+       9,     8,    11,    13,    16,    18,     0,    20,    10,     0,
+       5,     0,     0,     0,     0,     6,     7,    21,    12,    14,
+      15,    17
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -10,   -10,   -10,   -10,   -10,    10,    11,   -10
+     -11,   -11,   -11,   -11,     9,    -3,   -11,     5,    -2,     6
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     8,     9,    10,    11,    12,    13
+       0,     1,     8,     9,    10,    11,    12,    13,    14,    15
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -614,18 +619,18 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,    14,    18,     3,    15,     4,     4,    23,     0,     4,
-       5,     6,     7,     7,    -6,    16,     7,    17,    19,    20,
-      21,    22,     0,     0,    24,    25,    19,    20,    21,    22,
-      26,    27,    28,    29
+       2,    20,    18,     3,    19,     4,    17,    17,     4,     4,
+       5,     6,     7,    26,     5,     7,     7,    22,    16,    23,
+      29,    30,    21,    24,    27,    25,    28,     0,     0,     0,
+      31
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     4,    11,     3,     3,     5,     5,     3,    -1,     5,
-      10,    11,    12,    12,    11,     5,    12,     7,     6,     7,
-       8,     9,    -1,    -1,    14,    13,     6,     7,     8,     9,
-      19,    20,    21,    22
+       0,    11,     5,     3,     7,     5,     3,     3,     5,     5,
+      10,    11,    12,    16,    10,    12,    12,     7,     4,     9,
+      22,    23,     6,     8,    13,    16,    21,    -1,    -1,    -1,
+      24
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -633,22 +638,25 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,    15,     0,     3,     5,    10,    11,    12,    16,    17,
-      18,    19,    20,    21,     4,     3,    19,    19,    11,     6,
-       7,     8,     9,     3,    19,    13,    20,    20,    20,    20
+      18,    19,    20,    21,    22,    23,     4,     3,    19,    19,
+      11,     6,     7,     9,     8,    18,    19,    13,    21,    22,
+      22,    23
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
        0,    14,    15,    15,    16,    16,    17,    17,    17,    17,
-      18,    19,    19,    19,    19,    19,    20,    20,    21,    21
+      18,    19,    20,    20,    21,    21,    21,    22,    22,    23,
+      23,    23
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     0,     2,     1,     2,     3,     3,     1,     1,
-       2,     3,     3,     3,     3,     1,     1,     3,     1,     1
+       2,     1,     3,     1,     3,     3,     1,     3,     1,     1,
+       1,     3
 };
 
 
@@ -1111,24 +1119,16 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 6: /* stmt: IDENT ASSIGN IDENT  */
-#line 70 "Analyseur.bison"
-                         {
-           if (!defined[(int)(yyvsp[0].id)]) {
-              printError("Variable non définie");
-           } else {
-              symbol[(int)(yyvsp[-2].id)] = symbol[(int)(yyvsp[0].id)];
-              defined[(int)(yyvsp[-2].id)] = 1;
-              printf("%c = ", (yyvsp[-2].id));
-              printSet(symbol[(int)(yyvsp[-2].id)]);
-              printf("\n");
-           }
+  case 6: /* stmt: IDENT ASSIGN card_expr  */
+#line 69 "Analyseur.bison"
+                                          {
+           printError("Impossible d'affecter une valeur numérique à un ensemble.");
       }
 #line 1128 "yyparse.c"
     break;
 
   case 7: /* stmt: IDENT ASSIGN set_expr  */
-#line 81 "Analyseur.bison"
+#line 72 "Analyseur.bison"
                             {
            symbol[(int)(yyvsp[-2].id)] = (yyvsp[0].set);
            defined[(int)(yyvsp[-2].id)] = 1;
@@ -1140,7 +1140,7 @@ yyreduce:
     break;
 
   case 8: /* stmt: set_expr  */
-#line 88 "Analyseur.bison"
+#line 79 "Analyseur.bison"
                {
            printSet((yyvsp[0].set));
            printf("\n");
@@ -1148,66 +1148,74 @@ yyreduce:
 #line 1149 "yyparse.c"
     break;
 
-  case 10: /* card_expr: CARD set_expr  */
-#line 96 "Analyseur.bison"
-                    {
+  case 9: /* stmt: card_expr  */
+#line 83 "Analyseur.bison"
+                {
            int card = countBits((yyvsp[0].set));
            printf("%d\n", card);
       }
 #line 1158 "yyparse.c"
     break;
 
-  case 11: /* set_expr: set_expr UNION term  */
+  case 10: /* card_expr: CARD set_expr  */
+#line 90 "Analyseur.bison"
+                    {
+           (yyval.set) = (yyvsp[0].set);
+      }
+#line 1166 "yyparse.c"
+    break;
+
+  case 12: /* union_expr: union_expr UNION intersect_expr  */
+#line 98 "Analyseur.bison"
+                                      { (yyval.set) = (yyvsp[-2].set) | (yyvsp[0].set); }
+#line 1172 "yyparse.c"
+    break;
+
+  case 13: /* union_expr: intersect_expr  */
+#line 99 "Analyseur.bison"
+                     { (yyval.set) = (yyvsp[0].set); }
+#line 1178 "yyparse.c"
+    break;
+
+  case 14: /* intersect_expr: intersect_expr INTER diff_expr  */
 #line 103 "Analyseur.bison"
-                          { (yyval.set) = (yyvsp[-2].set) | (yyvsp[0].set); }
-#line 1164 "yyparse.c"
+                                     { (yyval.set) = (yyvsp[-2].set) & (yyvsp[0].set); }
+#line 1184 "yyparse.c"
     break;
 
-  case 12: /* set_expr: set_expr INTER term  */
+  case 15: /* intersect_expr: intersect_expr MINUS diff_expr  */
 #line 104 "Analyseur.bison"
-                          { (yyval.set) = (yyvsp[-2].set) & (yyvsp[0].set); }
-#line 1170 "yyparse.c"
+                                     { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
+#line 1190 "yyparse.c"
     break;
 
-  case 13: /* set_expr: set_expr MINUS term  */
+  case 16: /* intersect_expr: diff_expr  */
 #line 105 "Analyseur.bison"
-                          { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
-#line 1176 "yyparse.c"
+                { (yyval.set) = (yyvsp[0].set); }
+#line 1196 "yyparse.c"
     break;
 
-  case 14: /* set_expr: set_expr COMP term  */
-#line 106 "Analyseur.bison"
-                         { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
-#line 1182 "yyparse.c"
+  case 17: /* diff_expr: diff_expr COMP primary  */
+#line 109 "Analyseur.bison"
+                             { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
+#line 1202 "yyparse.c"
     break;
 
-  case 15: /* set_expr: term  */
-#line 107 "Analyseur.bison"
-           { (yyval.set) = (yyvsp[0].set); }
-#line 1188 "yyparse.c"
+  case 18: /* diff_expr: primary  */
+#line 110 "Analyseur.bison"
+              { (yyval.set) = (yyvsp[0].set); }
+#line 1208 "yyparse.c"
     break;
 
-  case 16: /* term: factor  */
-#line 111 "Analyseur.bison"
-             { (yyval.set) = (yyvsp[0].set); }
-#line 1194 "yyparse.c"
-    break;
-
-  case 17: /* term: '(' set_expr ')'  */
-#line 112 "Analyseur.bison"
-                       { (yyval.set) = (yyvsp[-1].set); }
-#line 1200 "yyparse.c"
-    break;
-
-  case 18: /* factor: SET  */
-#line 116 "Analyseur.bison"
+  case 19: /* primary: SET  */
+#line 114 "Analyseur.bison"
           { (yyval.set) = (yyvsp[0].set); }
-#line 1206 "yyparse.c"
+#line 1214 "yyparse.c"
     break;
 
-  case 19: /* factor: IDENT  */
-#line 117 "Analyseur.bison"
-            { 
+  case 20: /* primary: IDENT  */
+#line 115 "Analyseur.bison"
+            {
            if (!defined[(int)(yyvsp[0].id)]) {
                printError("Variable non définie");
                (yyval.set) = 0;
@@ -1215,11 +1223,17 @@ yyreduce:
                (yyval.set) = symbol[(int)(yyvsp[0].id)];
            }
       }
-#line 1219 "yyparse.c"
+#line 1227 "yyparse.c"
+    break;
+
+  case 21: /* primary: '(' set_expr ')'  */
+#line 123 "Analyseur.bison"
+                       { (yyval.set) = (yyvsp[-1].set); }
+#line 1233 "yyparse.c"
     break;
 
 
-#line 1223 "yyparse.c"
+#line 1237 "yyparse.c"
 
       default: break;
     }
@@ -1412,7 +1426,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 127 "Analyseur.bison"
+#line 126 "Analyseur.bison"
 
 
 int main(void) {
