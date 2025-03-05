@@ -53,7 +53,7 @@ int yyerror(const char *s);
 %left UNION
 %left INTER
 %left MINUS
-%right COMP
+%left COMP
 
 %%
 
@@ -81,10 +81,13 @@ stmt:
     | IDENT ASSIGN set_expr {
            symbol[(int)$1] = $3;
            defined[(int)$1] = 1;
-           printf("Expression syntaxiquement correcte.\n");
+           printf("%c = ", $1);
+           printSet(symbol[(int)$1]);
+           printf("\n");
       }
     | set_expr {
-           printf("Expression syntaxiquement correcte.\n");
+           printSet($1);
+           printf("\n");
       }
     | card_expr
     ;
@@ -100,12 +103,13 @@ set_expr:
       set_expr UNION term { $$ = $1 | $3; }
     | set_expr INTER term { $$ = $1 & $3; }
     | set_expr MINUS term { $$ = $1 & ~($3); }
+    | set_expr COMP term { $$ = $1 & ~($3); }
     | term { $$ = $1; }
     ;
 
 term:
-      COMP term { $$ = UNIVERSAL_SET & ~($2); }
-    | factor { $$ = $1; }
+      factor { $$ = $1; }
+    | '(' set_expr ')' { $$ = $2; }
     ;
 
 factor:
@@ -118,7 +122,6 @@ factor:
                $$ = symbol[(int)$1];
            }
       }
-    | '(' set_expr ')' { $$ = $2; }
     ;
 
 %%

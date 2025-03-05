@@ -41,6 +41,8 @@ CARD_WORD     ([cC][aA][rR][dD])
 [A-Za-z]     { yylval.id = toupper(yytext[0]); return IDENT; }
 {SET_LITERAL} { yylval.set = parseSet(yytext); return SET; }
 {EMPTY_SET}   { yylval.set = 0; return SET; }
+"("     { return '('; }
+")"     { return ')'; }
 [ \t\r]+     {  }
 \n           { return '\n'; }
 .            { printError("Caractère inattendu"); }

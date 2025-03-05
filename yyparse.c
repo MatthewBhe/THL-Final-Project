@@ -479,7 +479,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   38
+#define YYLAST   33
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  14
@@ -538,8 +538,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    60,    60,    61,    65,    66,    70,    81,    86,    89,
-      93,   100,   101,   102,   103,   107,   108,   112,   113,   121
+       0,    60,    60,    61,    65,    66,    70,    81,    88,    92,
+      96,   103,   104,   105,   106,   107,   111,   112,   116,   117
 };
 #endif
 
@@ -568,7 +568,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-9)
+#define YYPACT_NINF (-10)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -582,9 +582,9 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -9,     1,    -9,    -2,    -9,     2,     2,    -9,     2,    -9,
-      -8,    -9,    29,    -9,    -9,    16,    -9,    -9,    29,    24,
-      -9,     2,     2,     2,    -3,    29,    -9,    -9,    -9,    -9
+     -10,     0,   -10,    -3,   -10,     1,   -10,     1,   -10,    -9,
+     -10,    20,   -10,   -10,     4,   -10,    20,    12,   -10,     1,
+       1,     1,     1,     3,    20,   -10,   -10,   -10,   -10,   -10
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -592,21 +592,21 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,    18,    17,     0,     0,     4,     0,     3,
-       0,     9,     8,    14,    16,     0,    18,    15,    10,     0,
-       5,     0,     0,     0,    18,     7,    19,    11,    12,    13
+       2,     0,     1,    19,    18,     0,     4,     0,     3,     0,
+       9,     8,    15,    16,     0,    19,    10,     0,     5,     0,
+       0,     0,     0,    19,     7,    17,    11,    12,    14,    13
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    -9,    -9,    -9,    14,    -5,    -9
+     -10,   -10,   -10,   -10,   -10,    10,    11,   -10
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     9,    10,    11,    12,    13,    14
+       0,     1,     8,     9,    10,    11,    12,    13
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -614,41 +614,41 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      17,     2,    15,    20,     3,    16,     4,     4,    -6,     5,
-       5,     6,     7,     8,     8,     0,    27,    28,    29,    24,
-      18,     4,    19,     0,     5,     0,     0,     0,     8,    25,
-      21,    22,     0,    23,     0,    21,    22,    26,    23
+       2,    14,    18,     3,    15,     4,     4,    23,     0,     4,
+       5,     6,     7,     7,    -6,    16,     7,    17,    19,    20,
+      21,    22,     0,     0,    24,    25,    19,    20,    21,    22,
+      26,    27,    28,    29
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,     0,     4,    11,     3,     3,     5,     5,    11,     8,
-       8,    10,    11,    12,    12,    -1,    21,    22,    23,     3,
-       6,     5,     8,    -1,     8,    -1,    -1,    -1,    12,    15,
-       6,     7,    -1,     9,    -1,     6,     7,    13,     9
+       0,     4,    11,     3,     3,     5,     5,     3,    -1,     5,
+      10,    11,    12,    12,    11,     5,    12,     7,     6,     7,
+       8,     9,    -1,    -1,    14,    13,     6,     7,     8,     9,
+      19,    20,    21,    22
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    15,     0,     3,     5,     8,    10,    11,    12,    16,
-      17,    18,    19,    20,    21,     4,     3,    20,    19,    19,
-      11,     6,     7,     9,     3,    19,    13,    20,    20,    20
+       0,    15,     0,     3,     5,    10,    11,    12,    16,    17,
+      18,    19,    20,    21,     4,     3,    19,    19,    11,     6,
+       7,     8,     9,     3,    19,    13,    20,    20,    20,    20
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
        0,    14,    15,    15,    16,    16,    17,    17,    17,    17,
-      18,    19,    19,    19,    19,    20,    20,    21,    21,    21
+      18,    19,    19,    19,    19,    19,    20,    20,    21,    21
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     0,     2,     1,     2,     3,     3,     1,     1,
-       2,     3,     3,     3,     1,     2,     1,     1,     1,     3
+       2,     3,     3,     3,     3,     1,     1,     3,     1,     1
 };
 
 
@@ -1132,72 +1132,81 @@ yyreduce:
                             {
            symbol[(int)(yyvsp[-2].id)] = (yyvsp[0].set);
            defined[(int)(yyvsp[-2].id)] = 1;
-           printf("Expression syntaxiquement correcte.\n");
+           printf("%c = ", (yyvsp[-2].id));
+           printSet(symbol[(int)(yyvsp[-2].id)]);
+           printf("\n");
       }
-#line 1138 "yyparse.c"
+#line 1140 "yyparse.c"
     break;
 
   case 8: /* stmt: set_expr  */
-#line 86 "Analyseur.bison"
+#line 88 "Analyseur.bison"
                {
-           printf("Expression syntaxiquement correcte.\n");
+           printSet((yyvsp[0].set));
+           printf("\n");
       }
-#line 1146 "yyparse.c"
+#line 1149 "yyparse.c"
     break;
 
   case 10: /* card_expr: CARD set_expr  */
-#line 93 "Analyseur.bison"
+#line 96 "Analyseur.bison"
                     {
            int card = countBits((yyvsp[0].set));
            printf("%d\n", card);
       }
-#line 1155 "yyparse.c"
+#line 1158 "yyparse.c"
     break;
 
   case 11: /* set_expr: set_expr UNION term  */
-#line 100 "Analyseur.bison"
+#line 103 "Analyseur.bison"
                           { (yyval.set) = (yyvsp[-2].set) | (yyvsp[0].set); }
-#line 1161 "yyparse.c"
+#line 1164 "yyparse.c"
     break;
 
   case 12: /* set_expr: set_expr INTER term  */
-#line 101 "Analyseur.bison"
+#line 104 "Analyseur.bison"
                           { (yyval.set) = (yyvsp[-2].set) & (yyvsp[0].set); }
-#line 1167 "yyparse.c"
+#line 1170 "yyparse.c"
     break;
 
   case 13: /* set_expr: set_expr MINUS term  */
-#line 102 "Analyseur.bison"
+#line 105 "Analyseur.bison"
                           { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
-#line 1173 "yyparse.c"
+#line 1176 "yyparse.c"
     break;
 
-  case 14: /* set_expr: term  */
-#line 103 "Analyseur.bison"
-           { (yyval.set) = (yyvsp[0].set); }
-#line 1179 "yyparse.c"
+  case 14: /* set_expr: set_expr COMP term  */
+#line 106 "Analyseur.bison"
+                         { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
+#line 1182 "yyparse.c"
     break;
 
-  case 15: /* term: COMP term  */
+  case 15: /* set_expr: term  */
 #line 107 "Analyseur.bison"
-                { (yyval.set) = UNIVERSAL_SET & ~((yyvsp[0].set)); }
-#line 1185 "yyparse.c"
+           { (yyval.set) = (yyvsp[0].set); }
+#line 1188 "yyparse.c"
     break;
 
   case 16: /* term: factor  */
-#line 108 "Analyseur.bison"
+#line 111 "Analyseur.bison"
              { (yyval.set) = (yyvsp[0].set); }
-#line 1191 "yyparse.c"
+#line 1194 "yyparse.c"
     break;
 
-  case 17: /* factor: SET  */
+  case 17: /* term: '(' set_expr ')'  */
 #line 112 "Analyseur.bison"
-          { (yyval.set) = (yyvsp[0].set); }
-#line 1197 "yyparse.c"
+                       { (yyval.set) = (yyvsp[-1].set); }
+#line 1200 "yyparse.c"
     break;
 
-  case 18: /* factor: IDENT  */
-#line 113 "Analyseur.bison"
+  case 18: /* factor: SET  */
+#line 116 "Analyseur.bison"
+          { (yyval.set) = (yyvsp[0].set); }
+#line 1206 "yyparse.c"
+    break;
+
+  case 19: /* factor: IDENT  */
+#line 117 "Analyseur.bison"
             { 
            if (!defined[(int)(yyvsp[0].id)]) {
                printError("Variable non définie");
@@ -1206,17 +1215,11 @@ yyreduce:
                (yyval.set) = symbol[(int)(yyvsp[0].id)];
            }
       }
-#line 1210 "yyparse.c"
-    break;
-
-  case 19: /* factor: '(' set_expr ')'  */
-#line 121 "Analyseur.bison"
-                       { (yyval.set) = (yyvsp[-1].set); }
-#line 1216 "yyparse.c"
+#line 1219 "yyparse.c"
     break;
 
 
-#line 1220 "yyparse.c"
+#line 1223 "yyparse.c"
 
       default: break;
     }
@@ -1409,7 +1412,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 124 "Analyseur.bison"
+#line 127 "Analyseur.bison"
 
 
 int main(void) {
