@@ -472,20 +472,27 @@ char *yytext;
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <string.h>    /* Pour strdup() */
+#include <string.h>
 #include "yyparse.h"
 extern FILE *yyin;
+#define MAX_ELEMENT 1024
+#define NB_BLOCKS ((MAX_ELEMENT+63)/64)
+extern unsigned long long* set_create();
 
-static unsigned long long parseSet(const char *s) {
-    unsigned long long set = 0;
+
+static unsigned long long* parseSet(const char *s) {
+    unsigned long long* set = set_create();
     const char *p = s;
     if (*p == '{') p++;
     while (*p && *p != '}') {
         while (*p && !isdigit(*p)) p++;
         if (*p == '}' || *p == '\0') break;
         int num = atoi(p);
-        if (num >= 1 && num <= 63)
-            set |= (1ULL << num);
+        if (num >= 1 && num <= MAX_ELEMENT) {
+            int block = (num-1) / 64;
+            int bit = (num-1) % 64;
+            set[block] |= (1ULL << bit);
+        }
         while (*p && isdigit(*p)) p++;
     }
     return set;
@@ -494,8 +501,8 @@ static unsigned long long parseSet(const char *s) {
 static void printError(const char *s) {
     fprintf(stderr, "Lexical error: %s\n", s);
 }
-#line 498 "yylex.c"
-#line 499 "yylex.c"
+#line 505 "yylex.c"
+#line 506 "yylex.c"
 
 #define INITIAL 0
 
@@ -710,9 +717,9 @@ YY_DECL
 		}
 
 	{
-#line 35 "Analyseur.flex"
+#line 42 "Analyseur.flex"
 
-#line 716 "yylex.c"
+#line 723 "yylex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -771,81 +778,81 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 36 "Analyseur.flex"
+#line 43 "Analyseur.flex"
 { return UNION; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 37 "Analyseur.flex"
+#line 44 "Analyseur.flex"
 { return INTER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 38 "Analyseur.flex"
+#line 45 "Analyseur.flex"
 { return COMP; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 39 "Analyseur.flex"
+#line 46 "Analyseur.flex"
 { return ASSIGN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 40 "Analyseur.flex"
+#line 47 "Analyseur.flex"
 { return MINUS; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 41 "Analyseur.flex"
+#line 48 "Analyseur.flex"
 { return CARD; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 42 "Analyseur.flex"
+#line 49 "Analyseur.flex"
 { yylval.id = strdup(yytext); return IDENT; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 43 "Analyseur.flex"
+#line 50 "Analyseur.flex"
 { yylval.set = parseSet(yytext); return SET; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 44 "Analyseur.flex"
-{ yylval.set = 0; return SET; }
+#line 51 "Analyseur.flex"
+{ yylval.set = set_create(); return SET; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 45 "Analyseur.flex"
+#line 52 "Analyseur.flex"
 { return '('; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 46 "Analyseur.flex"
+#line 53 "Analyseur.flex"
 { return ')'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 47 "Analyseur.flex"
-{  }
+#line 54 "Analyseur.flex"
+{ }
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 48 "Analyseur.flex"
+#line 55 "Analyseur.flex"
 { return '\n'; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 49 "Analyseur.flex"
+#line 56 "Analyseur.flex"
 { printError("Caractère inattendu"); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 50 "Analyseur.flex"
+#line 57 "Analyseur.flex"
 ECHO;
 	YY_BREAK
-#line 849 "yylex.c"
+#line 856 "yylex.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1813,7 +1820,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 50 "Analyseur.flex"
+#line 57 "Analyseur.flex"
 
 
 

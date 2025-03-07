@@ -70,9 +70,9 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 65 "Analyseur.bison"
+#line 106 "Analyseur.bison"
 
-    unsigned long long set;
+    unsigned long long* set;
     char* id;
 
 #line 79 "yyparse.h"

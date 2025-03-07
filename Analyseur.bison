@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-
-#define UNIVERSAL_SET (((unsigned long long)-1) & ~1ULL)
+#define MAX_ELEMENT 1024
+#define NB_BLOCKS ((MAX_ELEMENT+63)/64)
 
 typedef struct Symbol {
     char *name;
-    unsigned long long set;
+    unsigned long long* set;
     int defined;
     struct Symbol *next;
 } Symbol;
@@ -22,34 +22,75 @@ Symbol* lookup(const char *name) {
              return s;
          s = s->next;
     }
-    s = (Symbol*)malloc(sizeof(Symbol));
+    s = malloc(sizeof(Symbol));
     s->name = strdup(name);
-    s->set = 0;
+    s->set = malloc(NB_BLOCKS * sizeof(unsigned long long));
+    for (int i = 0; i < NB_BLOCKS; i++) s->set[i] = 0;
     s->defined = 0;
     s->next = symbolTable;
     symbolTable = s;
     return s;
 }
 
-int countBits(unsigned long long set) {
+unsigned long long* set_create() {
+    unsigned long long* s = malloc(NB_BLOCKS * sizeof(unsigned long long));
+    for (int i = 0; i < NB_BLOCKS; i++)
+        s[i] = 0;
+    return s;
+}
+
+unsigned long long* set_copy(unsigned long long* a) {
+    unsigned long long* s = malloc(NB_BLOCKS * sizeof(unsigned long long));
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i];
+    return s;
+}
+
+unsigned long long* set_union(unsigned long long* a, unsigned long long* b) {
+    unsigned long long* s = set_create();
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i] | b[i];
+    return s;
+}
+
+unsigned long long* set_intersect(unsigned long long* a, unsigned long long* b) {
+    unsigned long long* s = set_create();
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i] & b[i];
+    return s;
+}
+
+unsigned long long* set_difference(unsigned long long* a, unsigned long long* b) {
+    unsigned long long* s = set_create();
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i] & ~(b[i]);
+    return s;
+}
+
+int countBits(unsigned long long* s) {
     int count = 0;
-    while (set) {
-        count += set & 1;
-        set >>= 1;
+    for (int i = 0; i < NB_BLOCKS; i++) {
+         unsigned long long block = s[i];
+         while (block) {
+             count += block & 1;
+             block >>= 1;
+         }
     }
     return count;
 }
 
-void printSet(unsigned long long set) {
+void printSet(unsigned long long* s) {
     int first = 1;
     printf("{");
-    for (int i = 1; i < 64; i++) {
-        if (set & (1ULL << i)) {
-            if (!first)
+    for (int num = 1; num <= MAX_ELEMENT; num++) {
+         int block = (num-1) / 64;
+         int bit = (num-1) % 64;
+         if(s[block] & (1ULL << bit)) {
+             if(!first)
                 printf(",");
-            printf("%d", i);
-            first = 0;
-        }
+             printf("%d", num);
+             first = 0;
+         }
     }
     printf("}");
 }
@@ -63,7 +104,7 @@ int yyerror(const char *s);
 %}
 
 %union {
-    unsigned long long set;
+    unsigned long long* set;
     char* id;
 }
 
@@ -101,6 +142,7 @@ stmt:
       }
     | IDENT ASSIGN set_expr {
            Symbol *sym = lookup($1);
+           if(sym->defined) { free(sym->set); }
            sym->set = $3;
            sym->defined = 1;
            printf("%s = ", sym->name);
@@ -119,26 +161,44 @@ stmt:
     ;
 
 card_expr:
-      CARD set_expr {
-           $$ = $2;
-      }
+      CARD set_expr { $$ = $2; }
     ;
 
 set_expr: union_expr ;
 
 union_expr:
-      union_expr UNION intersect_expr { $$ = $1 | $3; }
+      union_expr UNION intersect_expr {
+           unsigned long long* tmp = set_union($1, $3);
+           free($1);
+           free($3);
+           $$ = tmp;
+      }
     | intersect_expr { $$ = $1; }
     ;
 
 intersect_expr:
-      intersect_expr INTER diff_expr { $$ = $1 & $3; }
-    | intersect_expr MINUS diff_expr { $$ = $1 & ~($3); }
+      intersect_expr INTER diff_expr {
+           unsigned long long* tmp = set_intersect($1, $3);
+           free($1);
+           free($3);
+           $$ = tmp;
+      }
+    | intersect_expr MINUS diff_expr {
+           unsigned long long* tmp = set_difference($1, $3);
+           free($1);
+           free($3);
+           $$ = tmp;
+      }
     | diff_expr { $$ = $1; }
     ;
 
 diff_expr:
-      diff_expr COMP primary { $$ = $1 & ~($3); }
+      diff_expr COMP primary {
+           unsigned long long* tmp = set_difference($1, $3);
+           free($1);
+           free($3);
+           $$ = tmp;
+      }
     | primary { $$ = $1; }
     ;
 
@@ -148,9 +208,9 @@ primary:
            Symbol *sym = lookup($1);
            if (!sym->defined) {
                printError("Variable non définie");
-               $$ = 0;
+               $$ = set_create();
            } else {
-               $$ = sym->set;
+               $$ = set_copy(sym->set);
            }
            free($1);
       }

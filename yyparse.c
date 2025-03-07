@@ -73,12 +73,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-
-#define UNIVERSAL_SET (((unsigned long long)-1) & ~1ULL)
+#define MAX_ELEMENT 1024
+#define NB_BLOCKS ((MAX_ELEMENT+63)/64)
 
 typedef struct Symbol {
     char *name;
-    unsigned long long set;
+    unsigned long long* set;
     int defined;
     struct Symbol *next;
 } Symbol;
@@ -92,34 +92,75 @@ Symbol* lookup(const char *name) {
              return s;
          s = s->next;
     }
-    s = (Symbol*)malloc(sizeof(Symbol));
+    s = malloc(sizeof(Symbol));
     s->name = strdup(name);
-    s->set = 0;
+    s->set = malloc(NB_BLOCKS * sizeof(unsigned long long));
+    for (int i = 0; i < NB_BLOCKS; i++) s->set[i] = 0;
     s->defined = 0;
     s->next = symbolTable;
     symbolTable = s;
     return s;
 }
 
-int countBits(unsigned long long set) {
+unsigned long long* set_create() {
+    unsigned long long* s = malloc(NB_BLOCKS * sizeof(unsigned long long));
+    for (int i = 0; i < NB_BLOCKS; i++)
+        s[i] = 0;
+    return s;
+}
+
+unsigned long long* set_copy(unsigned long long* a) {
+    unsigned long long* s = malloc(NB_BLOCKS * sizeof(unsigned long long));
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i];
+    return s;
+}
+
+unsigned long long* set_union(unsigned long long* a, unsigned long long* b) {
+    unsigned long long* s = set_create();
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i] | b[i];
+    return s;
+}
+
+unsigned long long* set_intersect(unsigned long long* a, unsigned long long* b) {
+    unsigned long long* s = set_create();
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i] & b[i];
+    return s;
+}
+
+unsigned long long* set_difference(unsigned long long* a, unsigned long long* b) {
+    unsigned long long* s = set_create();
+    for (int i = 0; i < NB_BLOCKS; i++)
+         s[i] = a[i] & ~(b[i]);
+    return s;
+}
+
+int countBits(unsigned long long* s) {
     int count = 0;
-    while (set) {
-        count += set & 1;
-        set >>= 1;
+    for (int i = 0; i < NB_BLOCKS; i++) {
+         unsigned long long block = s[i];
+         while (block) {
+             count += block & 1;
+             block >>= 1;
+         }
     }
     return count;
 }
 
-void printSet(unsigned long long set) {
+void printSet(unsigned long long* s) {
     int first = 1;
     printf("{");
-    for (int i = 1; i < 64; i++) {
-        if (set & (1ULL << i)) {
-            if (!first)
+    for (int num = 1; num <= MAX_ELEMENT; num++) {
+         int block = (num-1) / 64;
+         int bit = (num-1) % 64;
+         if(s[block] & (1ULL << bit)) {
+             if(!first)
                 printf(",");
-            printf("%d", i);
-            first = 0;
-        }
+             printf("%d", num);
+             first = 0;
+         }
     }
     printf("}");
 }
@@ -131,7 +172,7 @@ void printError(const char *s) {
 extern int yylex(void);
 int yyerror(const char *s);
 
-#line 135 "yyparse.c"
+#line 176 "yyparse.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -569,9 +610,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    88,    88,    89,    93,    94,    98,   102,   111,   115,
-     122,   127,   130,   131,   135,   136,   137,   141,   142,   146,
-     147,   157
+       0,   129,   129,   130,   134,   135,   139,   143,   153,   157,
+     164,   167,   170,   176,   180,   186,   192,   196,   202,   206,
+     207,   217
 };
 #endif
 
@@ -1149,18 +1190,19 @@ yyreduce:
   switch (yyn)
     {
   case 6: /* stmt: IDENT ASSIGN card_expr  */
-#line 98 "Analyseur.bison"
+#line 139 "Analyseur.bison"
                                           {
            printError("Impossible d'affecter une valeur numérique à un ensemble.");
            free((yyvsp[-2].id));
       }
-#line 1158 "yyparse.c"
+#line 1199 "yyparse.c"
     break;
 
   case 7: /* stmt: IDENT ASSIGN set_expr  */
-#line 102 "Analyseur.bison"
+#line 143 "Analyseur.bison"
                             {
            Symbol *sym = lookup((yyvsp[-2].id));
+           if(sym->defined) { free(sym->set); }
            sym->set = (yyvsp[0].set);
            sym->defined = 1;
            printf("%s = ", sym->name);
@@ -1168,106 +1210,124 @@ yyreduce:
            printf("\n");
            free((yyvsp[-2].id));
       }
-#line 1172 "yyparse.c"
+#line 1214 "yyparse.c"
     break;
 
   case 8: /* stmt: set_expr  */
-#line 111 "Analyseur.bison"
+#line 153 "Analyseur.bison"
                {
            printSet((yyvsp[0].set));
            printf("\n");
       }
-#line 1181 "yyparse.c"
+#line 1223 "yyparse.c"
     break;
 
   case 9: /* stmt: card_expr  */
-#line 115 "Analyseur.bison"
+#line 157 "Analyseur.bison"
                 {
            int card = countBits((yyvsp[0].set));
            printf("%d\n", card);
       }
-#line 1190 "yyparse.c"
+#line 1232 "yyparse.c"
     break;
 
   case 10: /* card_expr: CARD set_expr  */
-#line 122 "Analyseur.bison"
-                    {
-           (yyval.set) = (yyvsp[0].set);
-      }
-#line 1198 "yyparse.c"
+#line 164 "Analyseur.bison"
+                    { (yyval.set) = (yyvsp[0].set); }
+#line 1238 "yyparse.c"
     break;
 
   case 12: /* union_expr: union_expr UNION intersect_expr  */
-#line 130 "Analyseur.bison"
-                                      { (yyval.set) = (yyvsp[-2].set) | (yyvsp[0].set); }
-#line 1204 "yyparse.c"
+#line 170 "Analyseur.bison"
+                                      {
+           unsigned long long* tmp = set_union((yyvsp[-2].set), (yyvsp[0].set));
+           free((yyvsp[-2].set));
+           free((yyvsp[0].set));
+           (yyval.set) = tmp;
+      }
+#line 1249 "yyparse.c"
     break;
 
   case 13: /* union_expr: intersect_expr  */
-#line 131 "Analyseur.bison"
+#line 176 "Analyseur.bison"
                      { (yyval.set) = (yyvsp[0].set); }
-#line 1210 "yyparse.c"
+#line 1255 "yyparse.c"
     break;
 
   case 14: /* intersect_expr: intersect_expr INTER diff_expr  */
-#line 135 "Analyseur.bison"
-                                     { (yyval.set) = (yyvsp[-2].set) & (yyvsp[0].set); }
-#line 1216 "yyparse.c"
+#line 180 "Analyseur.bison"
+                                     {
+           unsigned long long* tmp = set_intersect((yyvsp[-2].set), (yyvsp[0].set));
+           free((yyvsp[-2].set));
+           free((yyvsp[0].set));
+           (yyval.set) = tmp;
+      }
+#line 1266 "yyparse.c"
     break;
 
   case 15: /* intersect_expr: intersect_expr MINUS diff_expr  */
-#line 136 "Analyseur.bison"
-                                     { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
-#line 1222 "yyparse.c"
+#line 186 "Analyseur.bison"
+                                     {
+           unsigned long long* tmp = set_difference((yyvsp[-2].set), (yyvsp[0].set));
+           free((yyvsp[-2].set));
+           free((yyvsp[0].set));
+           (yyval.set) = tmp;
+      }
+#line 1277 "yyparse.c"
     break;
 
   case 16: /* intersect_expr: diff_expr  */
-#line 137 "Analyseur.bison"
+#line 192 "Analyseur.bison"
                 { (yyval.set) = (yyvsp[0].set); }
-#line 1228 "yyparse.c"
+#line 1283 "yyparse.c"
     break;
 
   case 17: /* diff_expr: diff_expr COMP primary  */
-#line 141 "Analyseur.bison"
-                             { (yyval.set) = (yyvsp[-2].set) & ~((yyvsp[0].set)); }
-#line 1234 "yyparse.c"
+#line 196 "Analyseur.bison"
+                             {
+           unsigned long long* tmp = set_difference((yyvsp[-2].set), (yyvsp[0].set));
+           free((yyvsp[-2].set));
+           free((yyvsp[0].set));
+           (yyval.set) = tmp;
+      }
+#line 1294 "yyparse.c"
     break;
 
   case 18: /* diff_expr: primary  */
-#line 142 "Analyseur.bison"
+#line 202 "Analyseur.bison"
               { (yyval.set) = (yyvsp[0].set); }
-#line 1240 "yyparse.c"
+#line 1300 "yyparse.c"
     break;
 
   case 19: /* primary: SET  */
-#line 146 "Analyseur.bison"
+#line 206 "Analyseur.bison"
           { (yyval.set) = (yyvsp[0].set); }
-#line 1246 "yyparse.c"
+#line 1306 "yyparse.c"
     break;
 
   case 20: /* primary: IDENT  */
-#line 147 "Analyseur.bison"
+#line 207 "Analyseur.bison"
             {
            Symbol *sym = lookup((yyvsp[0].id));
            if (!sym->defined) {
                printError("Variable non définie");
-               (yyval.set) = 0;
+               (yyval.set) = set_create();
            } else {
-               (yyval.set) = sym->set;
+               (yyval.set) = set_copy(sym->set);
            }
            free((yyvsp[0].id));
       }
-#line 1261 "yyparse.c"
+#line 1321 "yyparse.c"
     break;
 
   case 21: /* primary: '(' set_expr ')'  */
-#line 157 "Analyseur.bison"
+#line 217 "Analyseur.bison"
                        { (yyval.set) = (yyvsp[-1].set); }
-#line 1267 "yyparse.c"
+#line 1327 "yyparse.c"
     break;
 
 
-#line 1271 "yyparse.c"
+#line 1331 "yyparse.c"
 
       default: break;
     }
@@ -1460,7 +1520,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 160 "Analyseur.bison"
+#line 220 "Analyseur.bison"
 
 
 int main(void) {
