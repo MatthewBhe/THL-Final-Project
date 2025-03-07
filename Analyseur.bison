@@ -128,6 +128,7 @@ int yyerror(const char *s);
 %token ASSIGN
 %token <set> SET
 %token UNION
+%token MUNION
 %token INTER
 %token COMP
 %token MINUS
@@ -135,6 +136,7 @@ int yyerror(const char *s);
 %token IN
 
 %type <set> set_expr union_expr intersect_expr diff_expr primary card_expr
+%type <set> set_expr_list multi_union_expr
 
 %left UNION
 %left INTER MINUS
@@ -159,13 +161,16 @@ stmt:
     | card_expr { int card = countBits($1); printf("%d\n", card); }
     | set_expr '=' set_expr { if(set_equal($1, $3)) printf("true\n"); else printf("false\n"); free($1); free($3); }
     | set_expr IN set_expr { if(set_inclusion($1, $3)) printf("true\n"); else printf("false\n"); free($1); free($3); }
+    | multi_union_expr { printSet($1); printf("\n"); free($1); }
     ;
 
 card_expr:
       CARD set_expr { $$ = $2; }
     ;
 
-set_expr: union_expr ;
+set_expr:
+      union_expr
+    ;
 
 union_expr:
       union_expr UNION intersect_expr { unsigned long long* tmp = set_union($1, $3); free($1); free($3); $$ = tmp; }
@@ -187,6 +192,17 @@ primary:
       SET { $$ = $1; }
     | IDENT { Symbol *sym = lookup($1); if (!sym->defined) { printError("Variable non définie"); $$ = set_create(); } else { $$ = set_copy(sym->set); } free($1); }
     | '(' set_expr ')' { $$ = $2; }
+    | multi_union_expr { $$ = $1; }
+    ;
+
+/* Production pour union multiple sous forme d'une instruction complète */
+set_expr_list:
+      set_expr { $$ = $1; }
+    | set_expr_list ',' set_expr { unsigned long long* tmp = set_union($1, $3); free($1); $$ = tmp; }
+    ;
+
+multi_union_expr:
+      MUNION set_expr_list ')' { $$ = $2; }
     ;
 
 %%

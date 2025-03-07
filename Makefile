@@ -1,10 +1,10 @@
-### Makefile generique pour Flex seul ou Flex/Bison combiné
+### Makefile generique pour Flex seul ou Flex/Bison combinï¿½
 # - Nommage : XX.flex et XX.bison => Analyseurs XX ou lex-XX ou parse-XX
 # - Pas de librairies -ll -y : Ecrire dans les specs 
 #      les fonctions yywrap(), yyerror() et main()
 # - Couplage Flex/Bison : #include "yyparse.h"
 # - Un define FLEXALONE permet d'ecrire une spec Flex commune
-#      pour le mode Flex seul et le mode Flex/Bison combiné
+#      pour le mode Flex seul et le mode Flex/Bison combinï¿½
 # - Integration de code externe hors spec : ajouter des regles
 #      mon_analyseur : EXT_SRC = mon_code.c 
 # - Ajouter "%option nounput noinput" dans les spec flex pour

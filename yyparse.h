@@ -58,11 +58,12 @@ extern int yydebug;
     ASSIGN = 259,                  /* ASSIGN  */
     SET = 260,                     /* SET  */
     UNION = 261,                   /* UNION  */
-    INTER = 262,                   /* INTER  */
-    COMP = 263,                    /* COMP  */
-    MINUS = 264,                   /* MINUS  */
-    CARD = 265,                    /* CARD  */
-    IN = 266                       /* IN  */
+    MUNION = 262,                  /* MUNION  */
+    INTER = 263,                   /* INTER  */
+    COMP = 264,                    /* COMP  */
+    MINUS = 265,                   /* MINUS  */
+    CARD = 266,                    /* CARD  */
+    IN = 267                       /* IN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -76,7 +77,7 @@ union YYSTYPE
     unsigned long long* set;
     char* id;
 
-#line 80 "yyparse.h"
+#line 81 "yyparse.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
