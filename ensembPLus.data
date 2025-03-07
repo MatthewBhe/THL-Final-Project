@@ -1,0 +1,9 @@
+ensembleA := {1,2,3}
+ensembleB := {2,3,4}
+ensembleC := ensembleA union ensembleB
+card {1,1,2,3}
+ensembleD := ensembleA inter {2,3}
+ensembleE := ensembleA - ensembleB
+ensembleF := ensembleX
+ensembleA
+

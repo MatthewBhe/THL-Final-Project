@@ -2,9 +2,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
+
 #define UNIVERSAL_SET (((unsigned long long)-1) & ~1ULL)
-unsigned long long symbol[128];
-int defined[128] = {0};
+
+typedef struct Symbol {
+    char *name;
+    unsigned long long set;
+    int defined;
+    struct Symbol *next;
+} Symbol;
+
+Symbol *symbolTable = NULL;
+
+Symbol* lookup(const char *name) {
+    Symbol *s = symbolTable;
+    while(s) {
+         if(strcmp(s->name, name) == 0)
+             return s;
+         s = s->next;
+    }
+    s = (Symbol*)malloc(sizeof(Symbol));
+    s->name = strdup(name);
+    s->set = 0;
+    s->defined = 0;
+    s->next = symbolTable;
+    symbolTable = s;
+    return s;
+}
+
 int countBits(unsigned long long set) {
     int count = 0;
     while (set) {
@@ -13,6 +39,7 @@ int countBits(unsigned long long set) {
     }
     return count;
 }
+
 void printSet(unsigned long long set) {
     int first = 1;
     printf("{");
@@ -26,16 +53,18 @@ void printSet(unsigned long long set) {
     }
     printf("}");
 }
+
 void printError(const char *s) {
     fprintf(stderr, "Syntax error: %s\n", s);
 }
+
 extern int yylex(void);
 int yyerror(const char *s);
 %}
 
 %union {
     unsigned long long set;
-    char id;
+    char* id;
 }
 
 %token <id> IDENT
@@ -68,13 +97,16 @@ line:
 stmt:
       IDENT ASSIGN card_expr %prec ASSIGN {
            printError("Impossible d'affecter une valeur numérique à un ensemble.");
+           free($1);
       }
     | IDENT ASSIGN set_expr {
-           symbol[(int)$1] = $3;
-           defined[(int)$1] = 1;
-           printf("%c = ", $1);
-           printSet(symbol[(int)$1]);
+           Symbol *sym = lookup($1);
+           sym->set = $3;
+           sym->defined = 1;
+           printf("%s = ", sym->name);
+           printSet(sym->set);
            printf("\n");
+           free($1);
       }
     | set_expr {
            printSet($1);
@@ -113,12 +145,14 @@ diff_expr:
 primary:
       SET { $$ = $1; }
     | IDENT {
-           if (!defined[(int)$1]) {
+           Symbol *sym = lookup($1);
+           if (!sym->defined) {
                printError("Variable non définie");
                $$ = 0;
            } else {
-               $$ = symbol[(int)$1];
+               $$ = sym->set;
            }
+           free($1);
       }
     | '(' set_expr ')' { $$ = $2; }
     ;
@@ -126,10 +160,6 @@ primary:
 %%
 
 int main(void) {
-    for (int i = 0; i < 128; i++) {
-        symbol[i] = 0;
-        defined[i] = 0;
-    }
     yyparse();
     return 0;
 }

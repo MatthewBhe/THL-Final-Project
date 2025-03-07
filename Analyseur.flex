@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>    
 #include "yyparse.h"
 extern FILE *yyin;
 
@@ -38,15 +39,13 @@ CARD_WORD     ([cC][aA][rR][dD])
 ":="          { return ASSIGN; }
 "-"           { return MINUS; }
 {CARD_WORD}   { return CARD; }
-[A-Za-z]     { yylval.id = toupper(yytext[0]); return IDENT; }
+[A-Za-z][A-Za-z0-9]*  { yylval.id = strdup(yytext); return IDENT; }
 {SET_LITERAL} { yylval.set = parseSet(yytext); return SET; }
 {EMPTY_SET}   { yylval.set = 0; return SET; }
-"("     { return '('; }
-")"     { return ')'; }
+"("           { return '('; }
+")"           { return ')'; }
 [ \t\r]+     {  }
 \n           { return '\n'; }
 .            { printError("Caractère inattendu"); }
 %%
-
-
 
