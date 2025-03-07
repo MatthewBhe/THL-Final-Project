@@ -45,6 +45,7 @@ CARD_WORD     ([cC][aA][rR][dD])
 ":="          { return ASSIGN; }
 "-"           { return MINUS; }
 {CARD_WORD}   { return CARD; }
+"in"          { return IN; }
 [A-Za-z][A-Za-z0-9]*  { yylval.id = strdup(yytext); return IDENT; }
 {SET_LITERAL} { yylval.set = parseSet(yytext); return SET; }
 {EMPTY_SET}   { yylval.set = set_create(); return SET; }

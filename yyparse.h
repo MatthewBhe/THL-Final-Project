@@ -61,7 +61,8 @@ extern int yydebug;
     INTER = 262,                   /* INTER  */
     COMP = 263,                    /* COMP  */
     MINUS = 264,                   /* MINUS  */
-    CARD = 265                     /* CARD  */
+    CARD = 265,                    /* CARD  */
+    IN = 266                       /* IN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -70,12 +71,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 114 "Analyseur.bison"
+#line 122 "Analyseur.bison"
 
     unsigned long long* set;
     char* id;
 
-#line 79 "yyparse.h"
+#line 80 "yyparse.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

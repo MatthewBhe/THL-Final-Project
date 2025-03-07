@@ -355,8 +355,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 16
-#define YY_END_OF_BUFFER 17
+#define YY_NUM_RULES 17
+#define YY_END_OF_BUFFER 18
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -366,10 +366,10 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[41] =
     {   0,
-        0,    0,   17,   15,   13,   14,   11,   12,    5,   15,
-       10,    7,    7,    7,    7,    7,   15,   13,    4,    7,
-        7,    7,    7,    7,    0,    9,    7,    7,    7,    7,
-        0,    8,    6,    3,    7,    7,    0,    2,    1,    0
+        0,    0,   18,   16,   14,   15,   12,   13,    5,   16,
+       11,    8,    8,    8,    8,    8,   16,   14,    4,    8,
+        8,    8,    7,    8,    0,   10,    8,    8,    8,    8,
+        0,    9,    6,    3,    8,    8,    0,    2,    1,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -810,55 +810,60 @@ YY_RULE_SETUP
 case 7:
 YY_RULE_SETUP
 #line 48 "Analyseur.flex"
-{ yylval.id = strdup(yytext); return IDENT; }
+{ return IN; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 49 "Analyseur.flex"
-{ yylval.set = parseSet(yytext); return SET; }
+{ yylval.id = strdup(yytext); return IDENT; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 50 "Analyseur.flex"
-{ yylval.set = set_create(); return SET; }
+{ yylval.set = parseSet(yytext); return SET; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 51 "Analyseur.flex"
-{ return '='; }
+{ yylval.set = set_create(); return SET; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 52 "Analyseur.flex"
-{ return '('; }
+{ return '='; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 53 "Analyseur.flex"
-{ return ')'; }
+{ return '('; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 54 "Analyseur.flex"
-{ }
+{ return ')'; }
 	YY_BREAK
 case 14:
-/* rule 14 can match eol */
 YY_RULE_SETUP
 #line 55 "Analyseur.flex"
-{ return '\n'; }
+{ }
 	YY_BREAK
 case 15:
+/* rule 15 can match eol */
 YY_RULE_SETUP
 #line 56 "Analyseur.flex"
-{ printError("Caractère inattendu"); }
+{ return '\n'; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 57 "Analyseur.flex"
+{ printError("Caractère inattendu"); }
+	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 58 "Analyseur.flex"
 ECHO;
 	YY_BREAK
-#line 862 "yylex.c"
+#line 867 "yylex.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1826,7 +1831,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 57 "Analyseur.flex"
+#line 58 "Analyseur.flex"
 
 
 
