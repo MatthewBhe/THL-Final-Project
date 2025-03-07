@@ -1,0 +1,38 @@
+A := {1,2,3}
+B := {1,2,3}
+C := {1,2,4}
+D := {2,3,4,5,6}
+E := {}
+
+A
+B
+C
+D
+E
+
+A union C
+A inter C
+A - C
+A comp C
+( A union D ) inter C
+
+card A
+card {1,2,2,3,4}
+
+A = B
+A = C
+{1,2,3} = {1,2,3}
+{1,2,3} = {1,2,4}
+
+F := card {1,2,3}
+
+G
+
+( A union B ) inter ( C union D )
+A union ( B inter ( C - D ) )
+
+E = {}
+
+X := {10,20} union {20,30} union {30,40}
+X
+

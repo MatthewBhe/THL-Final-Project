@@ -95,6 +95,14 @@ void printSet(unsigned long long* s) {
     printf("}");
 }
 
+int set_equal(unsigned long long* a, unsigned long long* b) {
+    for (int i = 0; i < NB_BLOCKS; i++) {
+         if(a[i] != b[i])
+              return 0;
+    }
+    return 1;
+}
+
 void printError(const char *s) {
     fprintf(stderr, "Syntax error: %s\n", s);
 }
@@ -157,6 +165,14 @@ stmt:
     | card_expr {
            int card = countBits($1);
            printf("%d\n", card);
+      }
+    | set_expr '=' set_expr {
+           if(set_equal($1, $3))
+                printf("true\n");
+           else
+                printf("false\n");
+           free($1);
+           free($3);
       }
     ;
 

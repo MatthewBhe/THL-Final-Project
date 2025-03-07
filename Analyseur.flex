@@ -9,7 +9,6 @@ extern FILE *yyin;
 #define NB_BLOCKS ((MAX_ELEMENT+63)/64)
 extern unsigned long long* set_create();
 
-
 static unsigned long long* parseSet(const char *s) {
     unsigned long long* set = set_create();
     const char *p = s;
@@ -49,6 +48,7 @@ CARD_WORD     ([cC][aA][rR][dD])
 [A-Za-z][A-Za-z0-9]*  { yylval.id = strdup(yytext); return IDENT; }
 {SET_LITERAL} { yylval.set = parseSet(yytext); return SET; }
 {EMPTY_SET}   { yylval.set = set_create(); return SET; }
+"="           { return '='; }
 "("           { return '('; }
 ")"           { return ')'; }
 [ \t\r]+     { }
