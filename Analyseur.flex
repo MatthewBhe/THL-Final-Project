@@ -39,23 +39,26 @@ EMPTY_SET     \{\}
 CARD_WORD     ([cC][aA][rR][dD])
 
 %%
-"union("     { return MUNION; }
-"union"      { return UNION; }
-"inter"      { return INTER; }
-"comp"       { return COMP; }
-":="         { return ASSIGN; }
-"-"          { return MINUS; }
-{CARD_WORD}  { return CARD; }
-"in"         { return IN; }
-[A-Za-z][A-Za-z0-9]*  { yylval.id = strdup(yytext); return IDENT; }
+"union"       { return UNION; }
+"inter"       { return INTER; }
+"comp"        { return COMP; }
+":="          { return ASSIGN; }
+"-"           { return MINUS; }
+{CARD_WORD}   { return CARD; }
+"in"          { return IN; }
+[A-Za-z_][A-Za-z0-9_]*  { yylval.id = strdup(yytext); return IDENT; }
 {SET_LITERAL} { yylval.set = parseSet(yytext); return SET; }
-{EMPTY_SET}  { yylval.set = set_create(); return SET; }
-"="          { return '='; }
-"("          { return '('; }
-")"          { return ')'; }
-","          { return ','; }
-[ \t\r]+    { }
-\n          { return '\n'; }
-.           { printError("Caractère inattendu"); }
+{EMPTY_SET}   { yylval.set = set_create(); return SET; }
+"="           { return '='; }
+"("           { return '('; }
+")"           { return ')'; }
+","           { return ','; }
+[ \t\r]+     { }
+\n           { return '\n'; }
+.            { 
+                char msg[50];
+                snprintf(msg, sizeof(msg), "Caractère inattendu : %s", yytext);
+                printError(msg);
+             }
 %%
 
